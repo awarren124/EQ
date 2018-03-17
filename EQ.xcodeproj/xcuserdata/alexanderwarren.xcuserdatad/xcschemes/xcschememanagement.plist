@@ -6,8 +6,28 @@
 	<dict>
 		<key>EQ.xcscheme</key>
 		<dict>
+			<key>isShown</key>
+			<true/>
 			<key>orderHint</key>
-			<integer>0</integer>
+			<integer>4</integer>
+		</dict>
+	</dict>
+	<key>SuppressBuildableAutocreation</key>
+	<dict>
+		<key>01FBC5FE205D4A1900452073</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>01FBC615205D4A1900452073</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>01FBC620205D4A1900452073</key>
+		<dict>
+			<key>primary</key>
+			<true/>
 		</dict>
 	</dict>
 </dict>

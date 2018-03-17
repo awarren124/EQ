@@ -1,0 +1,6 @@
+framework module Pods_EQTests {
+  umbrella header "Pods-EQTests-umbrella.h"
+
+  export *
+  module * { export * }
+}

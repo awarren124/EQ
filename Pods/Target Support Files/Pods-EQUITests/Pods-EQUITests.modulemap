@@ -1,0 +1,6 @@
+framework module Pods_EQUITests {
+  umbrella header "Pods-EQUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}
