@@ -26,9 +26,20 @@ class JoinIfGameViewController: UIViewController {
     
 
     @IBAction func joinIfGameButtonPressed(_ sender: UIButton) {
-        RequestHandler.makeRequestToURL(url: "\(Constants.serverURL)/checkifgame", withHandler: { (data, response, error) in
-            
-        })
+//        print("here")
+//        RequestHandler.postRequestToURL(url: "\(Constants.serverURL)/joingame", info: "Alexander Warren", withHandler: { (json) in
+//            print("here2")
+//            var questions = [Question]()
+//            for i in 1...json.count {
+//                let question = Question(json: json["q\(i)"] as! [String : Any])
+//                questions.append(question)
+//            }
+//            let sb = UIStoryboard(name: "Main", bundle: nil)
+//            let vc = sb.instantiateViewController(withIdentifier: "StudentStreamViewController") as! StudentStreamViewController
+//            vc.questions = questions
+//            self.present(vc, animated: true, completion: nil)
+//            
+//        })
     }
     /*
     // MARK: - Navigation

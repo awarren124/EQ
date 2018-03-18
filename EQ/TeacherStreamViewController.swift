@@ -12,9 +12,12 @@ import LFLiveKit
 
 class TeacherStreamViewController: UIViewController, LFLiveSessionDelegate, UITableViewDelegate, UITableViewDataSource {
     
-    var currentQuestion = Question()
+    var questions: [Question]!
+    var currentQuestion: Question!
+    var questionIndex = 0
     var currentSubject = ""
     
+    @IBOutlet weak var currentQuestionLabel: UILabel!
     
     
     
@@ -31,25 +34,26 @@ class TeacherStreamViewController: UIViewController, LFLiveSessionDelegate, UITa
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         session.delegate = self
         session.preView = containerView
-        
+        currentQuestion = questions[0]
         answersTableView.delegate = self
         answersTableView.dataSource = self
         answersTableView.layer.cornerRadius = 15
         answersTableView.layer.borderColor = UIColor.lightGray.cgColor
         answersTableView.layer.borderWidth = 7
 
+        currentQuestionLabel.text = currentQuestion.question
+
         requestAccessForVideo()
         requestAccessForAudio()
         
         let stream = LFLiveStreamInfo()
         let ip = "54.91.20.135"
-        stream.url = "rtmp://\(ip)/live/stream"//"rtmp://ec2-54-84-157-89.compute-1.amazonaws.com/live/stream"//"rtmp://100.104.26.68/live/test"
+        stream.url = "rtmp://\(ip)/show/stream"//"rtmp://ec2-54-84-157-89.compute-1.amazonaws.com/live/stream"//"rtmp://100.104.26.68/live/test"
         session.startLive(stream)
         
-        RequestHandler.makeRequestToURL(url: "\(Constants.serverURL)/startgame")
+//        RequestHandler.makeRequestToURL(url: "\(Constants.serverURL)/startgame")
         
     }
     
@@ -133,6 +137,7 @@ class TeacherStreamViewController: UIViewController, LFLiveSessionDelegate, UITa
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = UITableViewCell(style: .default, reuseIdentifier: "Answer Cell Identifier")
+        print(currentQuestion)
         cell.textLabel?.text = currentQuestion.answers[indexPath.row]
         cell.detailTextLabel?.text = String(arc4random_uniform(10))
         if indexPath.row == currentQuestion.correctAnswerIndex {
@@ -144,28 +149,12 @@ class TeacherStreamViewController: UIViewController, LFLiveSessionDelegate, UITa
     }
     
     @IBAction func newQuestionButtonPressed(_ sender: UIButton) {
-        currentQuestion = QuestionBank.newQuestionForSubject(subject: currentSubject)
-        let url = URL(string: Constants.serverURL)!
-//        var request = URLRequest(url: url)
-//        request.setValue("application/x-www-form-urlencoded", forHTTPHeaderField: "Content-Type")
-//        request.httpMethod = "POST"
-//        let postString = "newQuestion"
-//        request.httpBody = postString.data(using: .utf8)
-//URLSession.shared.dataTask(with: <#T##URL#>, completionHandler: <#T##(Data?, URLResponse?, Error?) -> Void#>)
-        URLSession.shared.dataTask(with: url, completionHandler: { (data, response, error) in
-            if let error = error {
-                print(error.localizedDescription)
-            }
-            let json = try? JSONSerialization.jsonObject(with: data!, options: [])
-            if let array = json as? [Any] {
-                for item in array{
-                    if let item = item as? [String:Any] {
-                        
-                    }
-                    
-                }
-            }
-        })
+        currentQuestion = questions[questionIndex + 1]
+        questionIndex += 1
+        RequestHandler.makeRequestToURL(url: "\(Constants.serverURL)/nextquestion")
+        currentQuestionLabel.text = currentQuestion.question
+
+        answersTableView.reloadData()
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

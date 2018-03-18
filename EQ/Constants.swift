@@ -9,5 +9,5 @@
 import Foundation
 
 public class Constants {
-    public static let serverURL = ""
+    public static let serverURL = "http://54.91.20.135:5000"
 }

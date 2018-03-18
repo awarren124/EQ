@@ -13,18 +13,26 @@ import UIKit
 import AVKit
 class StudentStreamViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
-    var currentQuestion = Question()
+    @IBOutlet weak var currentQuestionLabel: UILabel!
+    var questions = [Question]()
+    var currentQuestion: Question!
+    var questionIndex = 0
     var revealAnswer = false
+    var requestTimer = Timer()
     @IBOutlet weak var answersTableView: UITableView!
     @IBOutlet weak var streamView: UIView!
     override func viewDidLoad() {
+        currentQuestion = questions[0]
+//        print()
         super.viewDidLoad()
         answersTableView.delegate = self
         answersTableView.dataSource = self
         answersTableView.layer.cornerRadius = 15
         answersTableView.layer.borderColor = UIColor.lightGray.cgColor
         answersTableView.layer.borderWidth = 7
-
+        currentQuestion = questions[0]
+        currentQuestionLabel.text = currentQuestion.question
+        requestTimer = Timer.scheduledTimer(timeInterval: 5, target: self,   selector: (#selector(StudentStreamViewController.updateQuestion)), userInfo: nil, repeats: true)
 
         let url = URL(string: "http://54.91.20.135:8080/hls/stream.m3u8")
         let player = AVPlayer(url: url!)
@@ -38,6 +46,7 @@ class StudentStreamViewController: UIViewController, UITableViewDelegate, UITabl
         player.play()
 
         self.view.bringSubview(toFront: answersTableView)
+        
 
     }
     
@@ -79,8 +88,11 @@ class StudentStreamViewController: UIViewController, UITableViewDelegate, UITabl
         //send answer to server
     }
     
-    func updateQuestion(question: Question){
-        currentQuestion = question
+    @objc func updateQuestion(){
+        currentQuestion = questions[questionIndex + 1]
+        questionIndex += 1
+        currentQuestionLabel.text = currentQuestion.question
+        answersTableView.reloadData()
     }
     
     /*

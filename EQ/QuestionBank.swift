@@ -10,8 +10,8 @@ import Foundation
 
 public class QuestionBank {
     
-    public static func newQuestionForSubject(subject: String) -> Question{
-        return Question.sampleQuestion
-    }
+//    public static func newQuestionForSubject(subject: String) -> Question{
+//        return Question.sampleQuestion
+//    }
     
 }

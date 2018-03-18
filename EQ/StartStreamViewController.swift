@@ -10,6 +10,8 @@ import UIKit
 
 class StartStreamViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     
+    var questions = [Question]()
+    
     let subjects = [
         "Math",
         "Physics",
@@ -39,8 +41,15 @@ class StartStreamViewController: UIViewController, UIPickerViewDelegate, UIPicke
     override func viewDidLoad() {
         super.viewDidLoad()
         subjectPickerView.delegate = self
-        RequestHandler.makeRequestToURL(url: "\(Constants.serverURL)/start")
-    }
+        RequestHandler.makeRequestToURL(url: "\(Constants.serverURL)/joingame", withHandler: { (json) in
+            var questions = [Question]()
+            for i in 1...json.count {
+                let question = Question(json: json["q\(i)"] as! [String : Any])
+                questions.append(question)
+            }
+            self.questions = questions
+            
+        })    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -55,6 +64,7 @@ class StartStreamViewController: UIViewController, UIPickerViewDelegate, UIPicke
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if let vc = segue.destination as? TeacherStreamViewController{
             vc.currentSubject = currentSubject
+            vc.questions = questions
         }
     }
     
